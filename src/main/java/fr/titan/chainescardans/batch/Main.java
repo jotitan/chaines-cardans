@@ -26,7 +26,6 @@ public class Main {
             return;
         }
 
-
         boolean tri = true;
         boolean bruteMode = false;
 

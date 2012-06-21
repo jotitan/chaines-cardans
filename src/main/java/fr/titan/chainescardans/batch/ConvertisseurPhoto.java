@@ -73,7 +73,9 @@ public class ConvertisseurPhoto {
         }
 		String name = new File(dir).getName().toLowerCase();
 		if(!new File(dir + "\\sd").exists()){
-			new File(dir + "\\sd").mkdir();
+			if(!new File(dir + "\\sd").mkdir()){
+                logger.error("Probleme lors de la creation du repertoire sd");
+            }
 			convertFiles(files, dir + "\\sd", bigHeight,name);
 		}
 		else{
@@ -82,7 +84,9 @@ public class ConvertisseurPhoto {
 			}
 		}
 		if(!new File(dir + "\\ld").exists()){
-			new File(dir + "\\ld").mkdir();
+			if(!new File(dir + "\\ld").mkdir()){
+                logger.error("Probleme lors de la creation du repertoire ld");
+            }
 			convertFiles(files, dir + "\\ld", lowHeight,name);
 		}
 		else{
@@ -100,9 +104,8 @@ public class ConvertisseurPhoto {
 			}
 		});
 		ArrayList<File> files = new ArrayList<File>();
-		for(File file : list){
-			files.add(file);
-		}
+        Collections.addAll(files,list);
+
 		return files;
 
 	}
@@ -129,7 +132,9 @@ public class ConvertisseurPhoto {
 		for(File f : files){
 			String fn = name + count++ + ".jpg";
 			File renameFile = new File(f.getParent() + "\\" + fn);
-			f.renameTo(renameFile);
+			if(!f.renameTo(renameFile)){
+                logger.error("Erreur lors de la creation de " + renameFile);
+            }
 			
 			final String convert = "\"" + irfanDir + "\" \"" + renameFile.getAbsolutePath() + "\" /jpgq=80 /resize=(0," + height + ") /resample /aspectratio /convert=\"" + outDir + "\\" + fn + "\""; 
 			logger.info("......Traitement de l'image " + f.getName());
@@ -157,17 +162,13 @@ public class ConvertisseurPhoto {
 	  public String getUpdateScript(int typeSortie){
 	        StringBuilder s = new StringBuilder();
 	        for(String us : updateScript){
-	            s.append("INSERT INTO media VALUES(null," + typeSortie + ",'','" + us + "'," + formatDate(us) + ")\n");
+	            s.append("INSERT INTO media VALUES(null,").append(typeSortie).append(",'','").append(us).append("',").append(formatDate(us)).append(")\n");
 	        }
 	        return s.toString();
 	    }
 
 	public ArrayList<String> getDirToUpdate() {
 		return dirToUpdate;
-	}
-
-	public void setDirToUpdate(ArrayList<String> dirToUpdate) {
-		this.dirToUpdate = dirToUpdate;
 	}
 
 }
