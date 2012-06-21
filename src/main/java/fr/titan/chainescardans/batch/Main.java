@@ -1,6 +1,8 @@
 package fr.titan.chainescardans.batch;
 
 
+import org.kohsuke.args4j.CmdLineParser;
+
 import java.io.File;
 import java.util.ResourceBundle;
 
@@ -22,15 +24,21 @@ public class Main {
 
     static{
         ResourceBundle r = ResourceBundle.getBundle("param");
-        ftpHost = r.getString("ftpHost");
+        /*ftpHost = r.getString("ftpHost");
         ftpLogin = r.getString("ftpLogin");
         ftpPass = r.getString("ftpPass");
         dirPhotos = r.getString("dirPhotos");
-        dirEspacePhotos = r.getString("dirEspacePhotos");
+        dirEspacePhotos = r.getString("dirEspacePhotos");*/
     }
 
     public static void main(String[] args) throws Exception{
-        String dir = args[0];
+        Options options = new Options();
+        new CmdLineParser(options).parseArgument(args);
+
+        System.out.println(options.getFtpHost() + " " + options.getUser());
+
+
+        /*String dir = args[0];
         boolean tri = ("1".equals(args[1]));
         boolean bruteMode = ("1".equals(args[2]));
         boolean modeSubScan = ("1".equals(args[3]));
@@ -45,6 +53,6 @@ public class Main {
         }
 
         new FtpUploader(ftpHost,ftpLogin,ftpPass,dirPhotos).uploadPhotos(conv.getDirToUpdate(), bruteMode, dir);
-        System.out.println(conv.getUpdateScript(1));
+        System.out.println(conv.getUpdateScript(1));*/
     }
 }
