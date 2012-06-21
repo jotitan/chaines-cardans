@@ -18,12 +18,14 @@ public class ConvertisseurPhoto {
 	private Logger logger = Logger.getLogger("ConvertisseurPhoto");
 	private ArrayList<String> dirToUpdate = new ArrayList<String>();
 	private List<String> updateScript = new ArrayList<String>();
-	private final int bigHeight = 600;
-	private final int lowHeight = 100;
+	private int bigHeight;
+	private int lowHeight;
 
-    public ConvertisseurPhoto(){
+    public ConvertisseurPhoto(int bigHeight,int lowHeight){
         ResourceBundle r = ResourceBundle.getBundle("param");
         irfanDir = r.getString("software.dir");
+        this.bigHeight = bigHeight;
+        this.lowHeight = lowHeight;
     }
 
 	public void traiterRoot(String root,boolean bruteMode,boolean tri){

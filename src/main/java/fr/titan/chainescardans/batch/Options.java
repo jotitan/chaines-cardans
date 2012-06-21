@@ -28,6 +28,12 @@ public class Options {
     @Option(name ="-r",aliases = "--recursive",required = false,usage = "Scanne les sous repertoires")
     private boolean recursive = false;
 
+    @Option(name ="-bh",aliases = "--bigHeight",required =false,usage="Hauteur de la grande image")
+    private int bigHeight = 600;
+
+    @Option(name ="-lh",aliases = "--lowHeight",required =false,usage="Hauteur de la petite image")
+    private int lowHeight = 600;
+
     public String getFtpHost() {
         return ftpHost;
     }
@@ -50,5 +56,13 @@ public class Options {
 
     public boolean isRecursive() {
         return recursive;
+    }
+
+    public int getBigHeight() {
+        return bigHeight;
+    }
+
+    public int getLowHeight() {
+        return lowHeight;
     }
 }

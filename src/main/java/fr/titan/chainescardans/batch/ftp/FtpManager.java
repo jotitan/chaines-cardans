@@ -1,4 +1,4 @@
-package fr.titan.chainescardans.batch;
+package fr.titan.chainescardans.batch.ftp;
 
 import java.io.File;
 import java.io.InputStream;
