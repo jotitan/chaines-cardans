@@ -1,58 +1,49 @@
 package fr.titan.chainescardans.batch;
 
 
+import org.apache.log4j.Logger;
+import org.kohsuke.args4j.CmdLineException;
 import org.kohsuke.args4j.CmdLineParser;
 
 import java.io.File;
 import java.util.ResourceBundle;
 
 /**
- * Created with IntelliJ IDEA.
- * User: Titan
- * Date: 20/06/12
- * Time: 18:32
- * To change this template use File | Settings | File Templates.
+ * @author titan
  */
 public class Main {
 
-    static String irfanDir = "c:\\Program Files\\IrfanView\\i_view32.exe";
-    public static String ftpHost = "";
-    public static String ftpLogin = "";
-    public static String ftpPass = "";
-    public static String dirPhotos = "";
-    public static String dirEspacePhotos = "";
-
-    static{
-        ResourceBundle r = ResourceBundle.getBundle("param");
-        /*ftpHost = r.getString("ftpHost");
-        ftpLogin = r.getString("ftpLogin");
-        ftpPass = r.getString("ftpPass");
-        dirPhotos = r.getString("dirPhotos");
-        dirEspacePhotos = r.getString("dirEspacePhotos");*/
-    }
+    public static String irfanDir = "c:\\Program Files\\IrfanView\\i_view32.exe";
+    private static Logger logger = Logger.getLogger(Main.class);
 
     public static void main(String[] args) throws Exception{
         Options options = new Options();
-        new CmdLineParser(options).parseArgument(args);
+        try{
+            new CmdLineParser(options).parseArgument(args);
+        }catch(CmdLineException ex){
+            // Gestion des champs manquants
+            logger.error(ex.getMessage());
+            System.out.println(ex.getMessage());
+            return;
+        }
+        if(true){
+            return;
+        }
 
-        System.out.println(options.getFtpHost() + " " + options.getUser());
-
-
-        /*String dir = args[0];
-        boolean tri = ("1".equals(args[1]));
-        boolean bruteMode = ("1".equals(args[2]));
-        boolean modeSubScan = ("1".equals(args[3]));
+        boolean tri = true;
+        boolean bruteMode = false;
 
         ConvertisseurPhoto conv = new ConvertisseurPhoto();
 
-        if(modeSubScan == true){
-            conv.traiterRoot(dir, bruteMode, tri);
+        if(options.isRecursive()){
+            conv.traiterRoot(options.getPhotosDirectory(), bruteMode, tri);
         }
         else{
-            conv.traiterDir(new File(dir), tri, bruteMode);
+            conv.traiterDir(new File(options.getPhotosDirectory()), tri, bruteMode);
         }
 
-        new FtpUploader(ftpHost,ftpLogin,ftpPass,dirPhotos).uploadPhotos(conv.getDirToUpdate(), bruteMode, dir);
-        System.out.println(conv.getUpdateScript(1));*/
+        /* Upload des photos converties*/
+        new FtpUploader(options.getFtpHost(),options.getUser(),options.getPhotosDirectory(),options.getRemoteDirectory()).uploadPhotos(conv.getDirToUpdate(), bruteMode, options.getPhotosDirectory());
+        System.out.println(conv.getUpdateScript(1));
     }
 }

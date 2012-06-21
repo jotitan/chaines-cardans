@@ -5,11 +5,8 @@ import java.io.FileFilter;
 import java.io.FilenameFilter;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Comparator;
-import java.util.Date;
-import java.util.List;
+import java.util.*;
+
 import org.apache.log4j.Logger;
 
 import com.drew.imaging.jpeg.JpegMetadataReader;
@@ -17,13 +14,18 @@ import com.drew.metadata.Metadata;
 import com.drew.metadata.exif.ExifDirectory;
 
 public class ConvertisseurPhoto {
-	private final String irfanDir = "c:\\Program Files\\IrfanView\\i_view32.exe";
+	private final String irfanDir;
 	private Logger logger = Logger.getLogger("ConvertisseurPhoto");
 	private ArrayList<String> dirToUpdate = new ArrayList<String>();
 	private List<String> updateScript = new ArrayList<String>();
 	private final int bigHeight = 600;
 	private final int lowHeight = 100;
-	
+
+    public ConvertisseurPhoto(){
+        ResourceBundle r = ResourceBundle.getBundle("param");
+        irfanDir = r.getString("software.dir");
+    }
+
 	public void traiterRoot(String root,boolean bruteMode,boolean tri){
 		File[] dirs = new File(root).listFiles(new FileFilter(){
 			public boolean accept(File f) {
@@ -58,7 +60,7 @@ public class ConvertisseurPhoto {
 	
 	private void convertCC(List<File> files,String dir,boolean bruteMode){
 //		if(bruteMode == false && new File(dir + "\\sd").exists() && new File(dir + "\\ld").exists()){
-//            logger.info("Envoi simple du r�pertoire " + dir + " par ftp");
+//            logger.info("Envoi simple du repertoire " + dir + " par ftp");
 //			dirToUpdate.add(dir + "\\sd");
 //            dirToUpdate.add(dir + "\\ld");
 //            return;
@@ -119,7 +121,7 @@ public class ConvertisseurPhoto {
 	}
 
 	private void convertFiles(List<File> files,String outDir,int height,String name){
-		logger.info("...D�but de conversion des fichiers de " + outDir);
+		logger.info("...Debut de conversion des fichiers de " + outDir);
 		dirToUpdate.add(outDir);
 		int count = 0;
 		for(File f : files){
@@ -153,7 +155,7 @@ public class ConvertisseurPhoto {
 	  public String getUpdateScript(int typeSortie){
 	        StringBuilder s = new StringBuilder();
 	        for(String us : updateScript){
-	            s.append("INSERT INTO MEDIA VALUES(null," + typeSortie + ",'','" + us + "'," + formatDate(us) + ")\n");
+	            s.append("INSERT INTO media VALUES(null," + typeSortie + ",'','" + us + "'," + formatDate(us) + ")\n");
 	        }
 	        return s.toString();
 	    }

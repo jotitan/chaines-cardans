@@ -23,7 +23,10 @@ public class Options {
     private String remoteDirectory;
 
     @Option(name = "-d",aliases = "--directoryPhotos",required = true,usage = "Chemin des photos a traiter")
-    private String localDirectory;
+    private String photosDirectory;
+
+    @Option(name ="-r",aliases = "--recursive",required = false,usage = "Scanne les sous repertoires")
+    private boolean recursive = false;
 
     public String getFtpHost() {
         return ftpHost;
@@ -41,7 +44,11 @@ public class Options {
         return remoteDirectory;
     }
 
-    public String getLocalDirectory() {
-        return localDirectory;
+    public String getPhotosDirectory() {
+        return photosDirectory;
+    }
+
+    public boolean isRecursive() {
+        return recursive;
     }
 }
