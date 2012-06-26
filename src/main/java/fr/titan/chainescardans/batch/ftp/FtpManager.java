@@ -204,10 +204,6 @@ public class FtpManager {
         return nb;
     }
 
-    public FTPFile[] getFiles(String directory){
-        return (FTPFile[])makeTraitement("directoryList", new Class[]{String.class},new Object[]{directory},FTPFile[].class);
-    }
-
     public void connect(){
         try{
             ftp.connect();
