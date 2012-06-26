@@ -1,11 +1,6 @@
 package fr.titan.chainescardans.batch.ftp;
 
-import com.enterprisedt.net.ftp.FTPClient;
-import com.enterprisedt.net.ftp.FTPConnectMode;
-import com.enterprisedt.net.ftp.FileTransferClient;
 import junit.framework.TestCase;
-
-import java.io.File;
 
 /**
  * User: Titan

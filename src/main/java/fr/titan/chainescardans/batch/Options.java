@@ -7,16 +7,16 @@ public class Options {
     private String ftpHost = "";
 
     @Option(name = "-u",aliases = "--user",required = true,usage = "User ftp")
-    private String user = "";;
+    private String user = "";
 
     @Option(name = "-p",aliases = "--password",required = false,usage = "Password ftp")
-    private String password = "";;
+    private String password = "";
 
     @Option(name = "-rd",aliases = "--remoteDirectory",required = false,usage = "Repertoire des photos sur le serveur ftp")
-    private String remoteDirectory = "";;
+    private String remoteDirectory = "";
 
     @Option(name = "-d",aliases = "--directoryPhotos",required = true,usage = "Chemin des photos a traiter")
-    private String photosDirectory = "";;
+    private String photosDirectory = "";
 
     @Option(name ="-r",aliases = "--recursive",required = false,usage = "Scanne les sous repertoires")
     private boolean recursive = false;
@@ -28,7 +28,7 @@ public class Options {
     private int bigHeight = 600;
 
     @Option(name ="-lh",aliases = "--lowHeight",required =false,usage="Hauteur de la petite image")
-    private int lowHeight = 600;
+    private int lowHeight = 100;
 
     public String getFtpHost() {
         return ftpHost;

@@ -40,6 +40,7 @@ public class Main {
 
             boolean tri = true;
             boolean bruteMode = false;
+            boolean bruteWriteMode = true;
 
             ConvertisseurPhoto conv = new ConvertisseurPhoto(options.getBigHeight(),options.getLowHeight());
             if(options.isRecursive()){
@@ -49,7 +50,7 @@ public class Main {
                 conv.traiterDir(new File(options.getPhotosDirectory()), tri, bruteMode);
             }
            /* Upload des photos converties*/
-            ftpUploader.uploadPhotos(conv.getDirToUpdate(), bruteMode, options.getPhotosDirectory());
+            ftpUploader.uploadPhotos(conv.getDirToUpdate(), bruteWriteMode, options.getPhotosDirectory());
             System.out.println(conv.getUpdateScript(1));
         }
     }

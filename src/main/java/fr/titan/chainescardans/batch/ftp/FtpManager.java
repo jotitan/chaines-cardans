@@ -121,7 +121,7 @@ public class FtpManager {
                 uploadDirectory(file, remoteDir + "/" + file.getName(), bruteMode);
             }else{
                 if(!file.getName().endsWith(".db")){
-                    uploadFile(file.getAbsolutePath(), remoteDir + "/" + file.getName());
+                    uploadFile(file.getAbsolutePath(), remoteDir + "/" + file.getName(),bruteMode);
                 }
             }
         }
