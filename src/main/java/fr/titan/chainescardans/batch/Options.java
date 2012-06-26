@@ -21,6 +21,9 @@ public class Options {
     @Option(name ="-r",aliases = "--recursive",required = false,usage = "Scanne les sous repertoires")
     private boolean recursive = false;
 
+    @Option(name ="-s",aliases = "--synchro",required = false,usage = "Synchro repertoire uniquement. 0 : 1er niveau, 1 : 2nd niveau, 2 : nb fichiers ")
+    private Integer synchro = null;
+
     @Option(name ="-bh",aliases = "--bigHeight",required =false,usage="Hauteur de la grande image")
     private int bigHeight = 600;
 
@@ -57,5 +60,9 @@ public class Options {
 
     public int getLowHeight() {
         return lowHeight;
+    }
+
+    public Integer getSynchro() {
+        return synchro;
     }
 }

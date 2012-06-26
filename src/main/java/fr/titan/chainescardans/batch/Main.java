@@ -7,6 +7,7 @@ import org.kohsuke.args4j.CmdLineException;
 import org.kohsuke.args4j.CmdLineParser;
 
 import java.io.File;
+import java.util.List;
 
 /**
  * @author titan
@@ -22,26 +23,34 @@ public class Main {
         }catch(CmdLineException ex){
             // Gestion des champs manquants
             logger.error(ex.getMessage());
-            System.out.println(ex.getMessage());
             return;
         }
 
-        boolean tri = true;
-        boolean bruteMode = false;
+        FtpUploader ftpUploader = new FtpUploader(options.getFtpHost(),options.getUser(),options.getPassword(),options.getRemoteDirectory());
 
-        ConvertisseurPhoto conv = new ConvertisseurPhoto(options.getBigHeight(),options.getLowHeight());
-        if(options.isRecursive()){
-            conv.traiterRoot(options.getPhotosDirectory(), bruteMode, tri);
+        /* Cas de la synchronisation */
+        if(options.getSynchro()!=null){
+            ConvertisseurPhoto conv = new ConvertisseurPhoto(0,0);
+            conv.setFtpManager(ftpUploader.getFtpManager());
+            List<String> list = conv.getSynchroDirectories(options.getPhotosDirectory(),options.getPhotosDirectory(),options.getRemoteDirectory(),options.getSynchro());
+            System.out.println(list.size());
+            ftpUploader.uploadPhotos(list, true, options.getPhotosDirectory());
         }
         else{
-            conv.traiterDir(new File(options.getPhotosDirectory()), tri, bruteMode);
-        }
 
-        if(true){
-            return;
+            boolean tri = true;
+            boolean bruteMode = false;
+
+            ConvertisseurPhoto conv = new ConvertisseurPhoto(options.getBigHeight(),options.getLowHeight());
+            if(options.isRecursive()){
+                conv.traiterRoot(options.getPhotosDirectory(), bruteMode, tri);
+            }
+            else{
+                conv.traiterDir(new File(options.getPhotosDirectory()), tri, bruteMode);
+            }
+           /* Upload des photos converties*/
+            ftpUploader.uploadPhotos(conv.getDirToUpdate(), bruteMode, options.getPhotosDirectory());
+            System.out.println(conv.getUpdateScript(1));
         }
-        /* Upload des photos converties*/
-        new FtpUploader(options.getFtpHost(),options.getUser(),options.getPhotosDirectory(),options.getRemoteDirectory()).uploadPhotos(conv.getDirToUpdate(), bruteMode, options.getPhotosDirectory());
-        System.out.println(conv.getUpdateScript(1));
     }
 }

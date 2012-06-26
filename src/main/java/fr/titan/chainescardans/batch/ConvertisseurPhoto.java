@@ -7,6 +7,7 @@ import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.*;
 
+import fr.titan.chainescardans.batch.ftp.FtpManager;
 import org.apache.log4j.Logger;
 
 import com.drew.imaging.jpeg.JpegMetadataReader;
@@ -20,6 +21,7 @@ public class ConvertisseurPhoto {
 	private List<String> updateScript = new ArrayList<String>();
 	private int bigHeight;
 	private int lowHeight;
+    private FtpManager ftpManager;
 
     public ConvertisseurPhoto(int bigHeight,int lowHeight){
         ResourceBundle r = ResourceBundle.getBundle("param");
@@ -28,14 +30,91 @@ public class ConvertisseurPhoto {
         this.lowHeight = lowHeight;
     }
 
-	public void traiterRoot(String root,boolean bruteMode,boolean tri){
+    public void setFtpManager(FtpManager ftpManager){
+        this.ftpManager = ftpManager;
+    }
+
+
+    private void addSynchroPhoto(String dir,List<String> list){
+        logger.info("0-Ajout de " + dir);
+        list.add(dir + "/sd");
+        list.add(dir + "/ld");
+    }
+
+    /**
+     * Cherche les repertoires a synchroniser
+     * @param localFolder : repertoire local a synchroniser
+     * @param remoteFolder : repertoire distant a synchroniser
+     * @param typeSynchro : type de synchro. 0 : 1er niveau, 1 : 2nd niveau, 2 : compte le nombre de fichier, 3 : compare les noms
+     *
+     */
+	public List<String> getSynchroDirectories(String root,String localFolder,String remoteFolder,int typeSynchro){
+        List<String> folders = new ArrayList<String>();
+        File[] dirs = new File(localFolder).listFiles(new FileFilter(){
+            public boolean accept(File f) {
+                return f.isDirectory();
+            }
+        });
+        for(File d : dirs){
+            if("AUTRES".equals(d.getName())){
+                return folders;
+            }
+            if(!new File(d.getAbsolutePath() + "\\hd").exists()){
+                // Pas de rep hd, on descend dans les fils
+                folders.addAll(getSynchroDirectories(root,d.getAbsolutePath(), remoteFolder, typeSynchro));
+            }
+            else{
+                // On ne fait le traitement que si un repertoire hd existe et que les images sd et ld ont ete crees
+                if(!new File(d.getAbsolutePath() + "\\sd").exists() || !new File(d.getAbsolutePath() + "\\ld").exists()){
+                    // On ne fait rien
+                }
+                else{
+                    // On test si le repertoire existe
+                    String testName = (remoteFolder + d.getAbsolutePath().replace(root,"")).replaceAll("\\\\","/");
+                    if(!ftpManager.isDirectoryExist(testName)){
+                        // On verifie si le repertoire existe sur le serveur distant
+                        addSynchroPhoto(d.getAbsolutePath(),folders);
+                    }
+                    else{
+                        // Verif de premier niveau, on verifie que le repertoire sd et ld sont present
+                        if(typeSynchro > 0){
+                            if(!ftpManager.isDirectoryExist(testName + "/sd") || !ftpManager.isDirectoryExist(testName + "/ld")){
+                                addSynchroPhoto(d.getAbsolutePath(),folders);
+                            }
+                            else{
+                                // On verifie que le nombre de photos est le meme
+                                if(typeSynchro == 2){
+                                    FilenameFilter filter = new FilenameFilter() {
+                                        @Override
+                                        public boolean accept(File dir, String name) {
+                                            return !name.contains(".db");
+                                        }
+                                    };
+                                    logger.info("Nb rep " + d.getAbsolutePath() + "\\sd " + (new File(d.getAbsolutePath() + "\\sd").list(filter).length+2));
+
+                                    if((new File(d.getAbsolutePath() + "\\sd").list(filter).length+2) != ftpManager.getNbFiles(testName + "/sd")){
+                                        addSynchroPhoto(d.getAbsolutePath(),folders);
+                                    };
+                                }
+                            }
+                        }
+
+
+                    }
+                }
+            }
+        }
+        return folders;
+    }
+
+    public void traiterRoot(String root,boolean bruteMode,boolean tri){
 		File[] dirs = new File(root).listFiles(new FileFilter(){
 			public boolean accept(File f) {
 				return f.isDirectory();
 			}
 		});
 		for(File d : dirs){
-			traiterDir(d, tri, bruteMode);			
+			traiterDir(d, tri, bruteMode);
 		}
 	}
 
