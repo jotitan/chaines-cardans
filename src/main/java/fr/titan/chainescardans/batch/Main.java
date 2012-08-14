@@ -53,5 +53,6 @@ public class Main {
             ftpUploader.uploadPhotos(conv.getDirToUpdate(), bruteWriteMode, options.getPhotosDirectory());
             System.out.println(conv.getUpdateScript(1));
         }
+        ftpUploader.getFtpManager().disconnect();
     }
 }

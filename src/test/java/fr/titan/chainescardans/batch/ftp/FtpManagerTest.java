@@ -9,5 +9,4 @@ import junit.framework.TestCase;
  */
 public class FtpManagerTest extends TestCase {
 
-
 }

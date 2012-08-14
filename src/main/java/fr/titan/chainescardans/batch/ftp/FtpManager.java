@@ -149,7 +149,7 @@ public class FtpManager {
 
     /* Test si un repertoire existe */
     public boolean isDirectoryExist(String directory){
-        String[] list = (String[])makeTraitement("directoryList",new Class[]{String.class},new Object[]{directory},String[].class);
+        String[] list = (String[])makeTraitement("directoryNameList",new Class[]{String.class,boolean.class},new Object[]{directory,false},String[].class);
         boolean existe = list!=null && list.length > 0;
         logger.info("Test repertoire " + directory + " : " + existe);
         return existe;
