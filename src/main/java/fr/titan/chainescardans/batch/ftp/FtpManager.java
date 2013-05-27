@@ -208,7 +208,7 @@ public class FtpManager {
         try{
             ftp.connect();
         }catch(Exception e){
-            logger.error("Impossible de se connecter ");
+            logger.error("Impossible de se connecter ",e);
         }
     }
 

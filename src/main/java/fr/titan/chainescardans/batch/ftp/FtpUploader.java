@@ -39,6 +39,9 @@ public class FtpUploader {
 	public FtpManager getFtpManager() {
 		return ftpManager;
 	}
-	
+
+    public void disconnect(){
+        ftpManager.disconnect();
+    }
 	
 }
