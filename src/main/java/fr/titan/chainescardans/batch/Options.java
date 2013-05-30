@@ -30,6 +30,12 @@ public class Options {
     @Option(name ="-lh",aliases = "--lowHeight",required =false,usage="Hauteur de la petite image")
     private int lowHeight = 100;
 
+    @Option(name ="-wl",aliases = "--webLogin",required =false,usage="Login du compte utilisateur web")
+    private String webLogin = "";
+
+    @Option(name ="-wp",aliases = "--webPass",required =false,usage="password du compte utilisateur web")
+    private String webPass = "";
+
     public String getFtpHost() {
         return ftpHost;
     }
@@ -64,5 +70,13 @@ public class Options {
 
     public Integer getSynchro() {
         return synchro;
+    }
+
+    public String getWebLogin() {
+        return webLogin;
+    }
+
+    public String getWebPass() {
+        return webPass;
     }
 }

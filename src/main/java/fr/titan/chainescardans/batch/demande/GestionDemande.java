@@ -6,12 +6,10 @@ import fr.titan.chainescardans.batch.bean.DemandeTraitement;
 import fr.titan.chainescardans.batch.bean.User;
 import fr.titan.chainescardans.batch.ftp.FtpUploader;
 import org.apache.log4j.Logger;
-import org.codehaus.jackson.map.ObjectMapper;
 import org.kohsuke.args4j.CmdLineException;
 import org.kohsuke.args4j.CmdLineParser;
 
 import java.io.File;
-import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -21,7 +19,7 @@ public class GestionDemande {
     private FtpUploader ftp;
 
     private final String drive = "Y:\\CHAINES_ET_CARDANS\\PHOTOS\\";
-    private Logger logger = Logger.getLogger("GestionDemande");
+    private static Logger logger = Logger.getLogger("GestionDemande");
     private static final String patternPentecote = ".*[0-9]{4}_[A-Z0-9]+/.+$";
     private static final String patternJournee = ".*[0-9]{4}_[0-9]{2}_[0-9]{2}_[A-Z0-9_]+/.+$";
     private static final String patternDivers = ".*[0-9]{4}_[0-9]{2}_[0-9]{2}_DIVERS_[A-Z0-9_]+/.+$";
@@ -39,10 +37,15 @@ public class GestionDemande {
         gd.options = options;
         try{
             gd.runTraitement();
-        }   catch(Exception e){}
+        }   catch(Exception e){
+            logger.error(e.getMessage());
+        }
     }
 
     public void runTraitement()throws Exception{
+        if(!RestRequestService.login(options.getWebLogin(),options.getWebPass())){
+            throw new Exception("Impossible de se connecter au compte utilisateur");
+        }
         List<User> users = RestRequestService.getDemandes();
 
         logger.info("Param : " + options.getFtpHost() + " , " + options.getUser() + " , " + options.getRemoteDirectory());
