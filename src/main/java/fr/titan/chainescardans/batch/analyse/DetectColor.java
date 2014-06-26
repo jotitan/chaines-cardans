@@ -3,11 +3,8 @@ package fr.titan.chainescardans.batch.analyse;
 import javax.imageio.ImageIO;
 import java.awt.image.BufferedImage;
 import java.awt.image.Raster;
-import java.io.ByteArrayOutputStream;
 import java.io.File;
-import java.util.Collection;
 import java.util.HashMap;
-import java.util.HashSet;
 
 /**
  *
@@ -19,9 +16,13 @@ public class DetectColor {
         BufferedImage img = ImageIO.read(file);
         Raster data = img.getData();
 
-        int[][] global = detectColor(data, false);
-        int[][] center = detectColor(data, true);
-
+        int[][] ciel = detectColor(data, 3);
+        int[][] global = detectColor(data, 0);
+        int[][] center = detectColor(data, 2);
+        if (new KeyColor(ciel[3]).isBlue()) {
+            System.out.println(path + " => blue");
+            global = detectColor(data, 6);
+        }
         return new int[][][] { global, center };
     }
 
@@ -36,6 +37,12 @@ public class DetectColor {
             this.blue = blue;
         }
 
+        public KeyColor(int[] colors) {
+            this.red = colors[0];
+            this.green = colors[1];
+            this.blue = colors[2];
+        }
+
         public KeyColor(int red, int green, int blue, int round) {
             this.red = roundTo(red, round);
             this.green = roundTo(green, round);
@@ -48,6 +55,10 @@ public class DetectColor {
 
         public boolean isGray() {
             return red == green && green == blue;
+        }
+
+        public boolean isBlue() {
+            return (blue >= red * 2 && blue >= green * 2) || (blue == 255 && green < 255 && red < 255);
         }
 
         @Override
@@ -78,19 +89,45 @@ public class DetectColor {
         }
     }
 
-    private int[][] detectColor(Raster data, boolean center) {
+    /**
+     * 
+     * @param type
+     *            : 0- tout, 1- centre (1/4), 2- centre (1/3), 3- tiers superieur, 4- tiers central, 5- tiers inferieur, 6- 2 tiers inferieur
+     * @return
+     */
+    private int[] getBoundsImage(int type, Raster data) {
+        switch (type) {
+        case 0:
+            return new int[] { 0, data.getWidth(), 0, data.getHeight() };
+        case 1:
+            return new int[] { data.getWidth() / 4, data.getWidth() * 3 / 4, data.getHeight() / 4, data.getHeight() * 3 / 4 };
+        case 2:
+            return new int[] { data.getWidth() / 3, data.getWidth() * 2 / 3, data.getHeight() / 3, data.getHeight() * 2 / 3 };
+        case 3:
+            return new int[] { 0, data.getWidth(), 0, data.getHeight() / 3 };
+        case 6:
+            return new int[] { 0, data.getWidth(), data.getHeight() / 3, data.getHeight() };
+        }
+        return null;
+    }
+
+    private int[][] detectColor(Raster data, int type) {
         double[][] results = new double[3][256];
 
-        int beginX = center ? data.getWidth() / 4 : 0;
-        int endX = (int) (center ? data.getWidth() * 0.75 : data.getWidth());
-        int beginY = center ? data.getHeight() / 4 : 0;
-        int endY = (int) (center ? data.getHeight() * 0.75 : data.getHeight());
+        // On detecte le cas du ciel (tiers superieur tout bleu). Si oui, on prend les 2 tiers inferieur
 
-        int totalPoints = (endX - beginX) * (endY - beginY);
+        int[] bounds = getBoundsImage(type, data);
+
+        // int beginX = center ? data.getWidth() / 4 : 0;
+        // int endX = (int) (center ? data.getWidth() * 0.75 : data.getWidth());
+        // int beginY = center ? data.getHeight() / 4 : 0;
+        // int endY = (int) (center ? data.getHeight() * 0.75 : data.getHeight());
+        //
+        int totalPoints = (bounds[1] - bounds[0]) * (bounds[3] - bounds[2]);
 
         HashMap<KeyColor, Integer> countByColor = new HashMap<KeyColor, Integer>();
-        for (int x = beginX; x < endX; x++) {
-            for (int y = beginY; y < endY; y++) {
+        for (int x = bounds[0]; x < bounds[1]; x++) {
+            for (int y = bounds[2]; y < bounds[3]; y++) {
                 KeyColor key = new KeyColor(data.getSample(x, y, 0), data.getSample(x, y, 1), data.getSample(x, y, 2), 51);
                 if (!countByColor.containsKey(key)) {
                     countByColor.put(key, 1);

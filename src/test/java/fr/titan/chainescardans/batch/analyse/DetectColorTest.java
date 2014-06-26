@@ -5,6 +5,8 @@ import junit.framework.TestCase;
 
 import java.io.File;
 import java.io.FileOutputStream;
+import java.io.FilenameFilter;
+import java.util.List;
 
 /**
  * Created with IntelliJ IDEA. User: 960963 Date: 24/06/14 Time: 10:06 To change this template use File | Settings | File Templates.
@@ -16,18 +18,22 @@ public class DetectColorTest extends TestCase {
 
         File file = File.createTempFile("test-result", ".html");
         FileOutputStream out = new FileOutputStream(file);
-
-        getColorResults("/test-perso.jpg", out);
-        getColorResults("/test_bleu.jpg", out);
-        getColorResults("/test-moto.jpg", out);
-        getColorResults("/test-moto-rouge.jpg", out);
-        getColorResults("/test-moto-blue.jpg", out);
-        getColorResults("/pull-rouge.jpg", out);
-
+        for (String image : getTestImages()) {
+            getColorResults("/" + image, out);
+        }
         out.close();
         System.out.println(file.getAbsolutePath());
         // Assert.assertEquals("blue", color);
 
+    }
+
+    private String[] getTestImages() {
+        return new File("target/test-classes").list(new FilenameFilter() {
+            @Override
+            public boolean accept(File dir, String name) {
+                return name.endsWith(".jpg");
+            }
+        });
     }
 
     private void getColorResults(String filename, FileOutputStream out) throws Exception {
