@@ -1,0 +1,113 @@
+<html>
+
+<head>
+
+<script type="text/javascript" src="http://vbaranzini.free.fr/v3.0/js/jquery/jquery-1.11.3.min.js"></script>
+<script type="text/javascript" src="swiper.jquery.min.js"></script>
+
+<link rel="stylesheet" href="swiper.min.css"></link>
+
+</head>
+
+<body style="background-color:black">
+
+<ul>
+
+</ul>
+
+
+<div class="swiper-container" style="display:none">
+	<div class="swiper-wrapper"></div>
+	<div class="swiper-pagination swiper-pagination-white"></div> 
+	<div class="swiper-button-next swiper-button-white"></div>
+	<div class="swiper-button-prev swiper-button-white"></div>
+	<div class="close swiper-button-white"></div>
+</div>
+
+ 
+
+<style>
+
+.close {
+	background-image: url(data:image/svg+xml;base64,PD94bWwgdmVyc2lvbj0iMS4wIiBlbmNvZGluZz0iVVRGLTgiPz48c3ZnIHZlcnNpb249IjEuMSIgaWQ9IkxheWVyXzEiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyIgeG1sbnM6eGxpbms9Imh0dHA6Ly93d3cudzMub3JnLzE5OTkveGxpbmsiIHg9IjBweCIgeT0iMHB4IiB3aWR0aD0iNTEycHgiIGhlaWdodD0iNTEycHgiIHZpZXdCb3g9Ii0xMjI5IC00MzMgNTEyIDUxMiIgZW5hYmxlLWJhY2tncm91bmQ9Im5ldyAtMTIyOSAtNDMzIDUxMiA1MTIiIHhtbDpzcGFjZT0icHJlc2VydmUiPjxwYXRoIGZpbGw9IiNGRkZGRkYiIGQ9Ik0tMTE1NCw0Yy0xMDAtMTAwLTEwMC0yNjIuMSwwLTM2MmMxMDAtMTAwLDI2Mi4xLTEwMCwzNjIuMSwwYzEwMCwxMDAsMTAwLDI2Mi4xLDAsMzYyICBDLTg5MiwxMDQtMTA1NCwxMDQtMTE1NCw0eiBNLTgxNi43LTMzMy4zYy04Ni4zLTg2LjMtMjI2LjMtODYuMy0zMTIuNSwwYy04Ni4zLDg2LjMtODYuMywyMjYuMiwwLDMxMi41ICBjODYuMyw4Ni4zLDIyNi4yLDg2LjMsMzEyLjUsMEMtNzMwLjQtMTA3LTczMC40LTI0Ny04MTYuNy0zMzMuM3ogTS0xMDQwLjktNjMuOWwtNDUuMy00NS4zbDY3LjktNjcuOWwtNjcuOS02Ny45bDQ1LjMtNDUuMyAgbDY3LjksNjcuOWw2Ny45LTY3LjlsNDUuMiw0NS4zbC02Ny45LDY3LjlsNjcuOSw2Ny45bC00NS4yLDQ1LjNsLTY3LjktNjcuOUwtMTA0MC45LTYzLjl6Ii8+PC9zdmc+);
+	background-size: 40px 40px;
+	background-repeat:no-repeat;
+	position:absolute;
+	right:10px;
+	top:10px;
+	z-index:10;
+	cursor:pointer;
+	width:40px;
+	height:40px;
+}
+html,body{position:relative;height:100%;margin:0px;}
+
+ul {list-style:none;}
+
+li {float:left;margin-right:5px;}
+
+.swiper-container {width:100%;height:100%;}
+.swiper-slide {text-align:center;}
+
+.swiper-slide img{
+	width:auto;
+	height:auto;
+	max-width:100%;
+	max-height:100%;
+	-ms-transform:translate(-50%,-50%);
+	-webkit-transform:translate(-50%,-50%);
+	-moz-transform:translate(-50%,-50%);
+	transform:translate(-50%,-50%);
+	position:absolute;
+	left:50%;
+	top:50%;
+}
+</style>
+
+<script>
+	var base = 'http://vbaranzini.free.fr/v2.0/photos/2016_MIRECOURT/17-ROULE_DIMANCHE_MATIN/';
+	var baseSD = base + 'sd/';
+	var baseLD = base + 'ld/';
+	var basename = '17-roule_dimanche_matin';
+	var cacheUrl = 'http://vbaranzini.free.fr/v3.0/cache.php?format=mb&file=';
+	var swipper = null;
+	
+	for(var i = 0 ; i < 89 ; i++) {
+		$('ul').append('<li data-pos="' + i + '"><img src="' + baseLD + basename + i + '.jpg"/></li>');
+		$('.swiper-wrapper').append('<div class="swiper-slide"><img data-src="' + baseSD + basename + i + '.jpg" class="swiper-lazy"/><div class="swiper-lazy-preloader swiper-lazy-preloader-white"></div></div>');
+	}
+	
+	$('ul > li').click(function(){
+		$('ul').hide();		
+		$('.swiper-container').show();
+		if(swipper == null){
+			swipper = run($(this).data('pos'));
+		}else{
+			swipper.slideTo($(this).data('pos'));
+		}
+	});
+	
+	$('.close').bind('click',close);
+	function run(initialSlide){
+		return new Swiper('.swiper-container', {
+			initialSlide:initialSlide,
+			nextButton: '.swiper-button-next',
+			prevButton: '.swiper-button-prev',
+			pagination: '.swiper-pagination',
+			keyboardControl:true,
+			paginationClickable: true,
+			preloadImages: false,
+			lazyLoading: true
+		});
+	}	
+	
+	function close(){
+		$('ul').show();		
+		$('.swiper-container').hide();
+	}
+	
+</script>
+
+</body>
+
+</html>
