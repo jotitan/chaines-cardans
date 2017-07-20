@@ -5,7 +5,7 @@
 <script type="text/javascript" src="http://vbaranzini.free.fr/v3.0/js/jquery/jquery-1.11.3.min.js"></script>
 <script type="text/javascript" src="swiper.jquery.min.js"></script>
 
-<link rel="stylesheet" href="swiper.min.css"></link>
+<link rel="stylesheet" href="swiper.min.css"/>
 
 </head>
 
@@ -29,16 +29,16 @@
 <style>
 
 .close {
-	background-image: url(data:image/svg+xml;base64,PD94bWwgdmVyc2lvbj0iMS4wIiBlbmNvZGluZz0iVVRGLTgiPz48c3ZnIHZlcnNpb249IjEuMSIgaWQ9IkxheWVyXzEiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyIgeG1sbnM6eGxpbms9Imh0dHA6Ly93d3cudzMub3JnLzE5OTkveGxpbmsiIHg9IjBweCIgeT0iMHB4IiB3aWR0aD0iNTEycHgiIGhlaWdodD0iNTEycHgiIHZpZXdCb3g9Ii0xMjI5IC00MzMgNTEyIDUxMiIgZW5hYmxlLWJhY2tncm91bmQ9Im5ldyAtMTIyOSAtNDMzIDUxMiA1MTIiIHhtbDpzcGFjZT0icHJlc2VydmUiPjxwYXRoIGZpbGw9IiNGRkZGRkYiIGQ9Ik0tMTE1NCw0Yy0xMDAtMTAwLTEwMC0yNjIuMSwwLTM2MmMxMDAtMTAwLDI2Mi4xLTEwMCwzNjIuMSwwYzEwMCwxMDAsMTAwLDI2Mi4xLDAsMzYyICBDLTg5MiwxMDQtMTA1NCwxMDQtMTE1NCw0eiBNLTgxNi43LTMzMy4zYy04Ni4zLTg2LjMtMjI2LjMtODYuMy0zMTIuNSwwYy04Ni4zLDg2LjMtODYuMywyMjYuMiwwLDMxMi41ICBjODYuMyw4Ni4zLDIyNi4yLDg2LjMsMzEyLjUsMEMtNzMwLjQtMTA3LTczMC40LTI0Ny04MTYuNy0zMzMuM3ogTS0xMDQwLjktNjMuOWwtNDUuMy00NS4zbDY3LjktNjcuOWwtNjcuOS02Ny45bDQ1LjMtNDUuMyAgbDY3LjksNjcuOWw2Ny45LTY3LjlsNDUuMiw0NS4zbC02Ny45LDY3LjlsNjcuOSw2Ny45bC00NS4yLDQ1LjNsLTY3LjktNjcuOUwtMTA0MC45LTYzLjl6Ii8+PC9zdmc+);
-	background-size: 40px 40px;
+   background-image: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAIAAAACACAMAAAD04JH5AAAACVBMVEUAAAD///////9zeKVjAAAAAnRSTlMAAHaTzTgAAAFkSURBVHgB7doxasRAEETR+nP/QztSJCwY/6AwlOLtrofxrqTuCeXrAzDAAAMMMMAAAwwwwAADDDDAOYfb675Pvuqk4N3nHuAFRwKs4FwAhED0iKr2+QQvUPXRHWR1fA9XG9/FVcb18XVxnXxVXC9fE9fNV8T185+P6+g/Hd/TaYMR+HyCEfh8ghH4fIIR+HyCEfh8ghH4fIIR+HyCEfh8ghDY/G9Akg+ByJeAJ0nkS8CTJfIl4J0m8ol/3lX5BC8w+QQtUPkEK3D5BCmQ+QQnEPkWgMz3AGS+B+Dz//dfoP0/0P4WtH8H2r+EjXtB4W7Yfx6oPxG1ngkv8r0gLt8L+m9G/XfD/ttxfz7Qn5D0Z0T9KVl/TtiflPZnxf1peX9f0N+Y9HdG/a1Zf2/Y35z2d8eN7Xn//ED/BEX/DEn/FI04R5Qkv/aRADSAPwO4yn+u6z47zjfAAAMMMMAAAwwwwAAD/AD+GUPfGGzXXgAAAABJRU5ErkJggg==);
+	background-size: 48px 48px;
 	background-repeat:no-repeat;
 	position:absolute;
 	right:10px;
 	top:10px;
 	z-index:10;
 	cursor:pointer;
-	width:40px;
-	height:40px;
+	width:48px;
+	height:48px;
 }
 html,body{position:relative;height:100%;margin:0px;}
 
@@ -95,9 +95,11 @@ li {float:left;margin-right:5px;}
 			prevButton: '.swiper-button-prev',
 			pagination: '.swiper-pagination',
 			keyboardControl:true,
-			paginationClickable: true,
+			//paginationClickable: true,
 			preloadImages: false,
-			lazyLoading: true
+			lazyLoading: true,
+         lazyLoadingInPrevNext:true,
+         lazyLoadingInPrevNextAmount:2
 		});
 	}	
 	
