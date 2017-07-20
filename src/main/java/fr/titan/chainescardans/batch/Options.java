@@ -36,6 +36,16 @@ public class Options {
     @Option(name ="-wp",aliases = "--webPass",required =false,usage="password du compte utilisateur web")
     private String webPass = "";
 
+    @Option(name ="-fl",aliases = "--flickrLogin",required =false,usage="Login du compte flickr")
+    private String loginFlickr = "";
+
+    @Option(name ="-fp",aliases = "--flickrPass",required =false,usage="password du compte flickr")
+    private String passFlickr = "";
+
+    @Option(name ="-fk",aliases = "--flickrKey",required =false,usage="cle du compte flickr")
+    private String keyFlickr = "";
+
+
     public String getFtpHost() {
         return ftpHost;
     }
@@ -78,5 +88,17 @@ public class Options {
 
     public String getWebPass() {
         return webPass;
+    }
+
+    public String getLoginFlickr() {
+        return loginFlickr;
+    }
+
+    public String getPassFlickr() {
+        return passFlickr;
+    }
+
+    public String getKeyFlickr() {
+        return keyFlickr;
     }
 }

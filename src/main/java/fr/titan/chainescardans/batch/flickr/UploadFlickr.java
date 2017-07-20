@@ -17,22 +17,19 @@ import java.util.List;
  * Time: 00:12
  */
 public class UploadFlickr {
-    private static final String API_KEY = "195bad828fbaf0ef4fd82a7d32fadf94";
-    private static String SECRET_KEY = "";
+    protected static final String API_KEY = "195bad828fbaf0ef4fd82a7d32fadf94";
 
     private Logger logger = Logger.getLogger(UploadFlickr.class);
     private Flickr flickr;
     private ManageDirectory manageDirectory;
 
     public static void main(String[] args)throws Exception{
-        SECRET_KEY = args[4];
         if(args.length<2){return;}
         // Login et Mdp en 2 et 3
-        UploadFlickr uploadFlickr = new UploadFlickr(args[2],args[3]);
+        UploadFlickr uploadFlickr = new UploadFlickr(args[2],args[3],args[4]);
         // Faire une boucle dans un repertoire
         String root = args[0];
         File[] directories = new File(root).listFiles(new FilenameFilter() {
-            @Override
             public boolean accept(File dir, String name) {
                 return new File(dir.getAbsolutePath() + "/" + name).isDirectory()
                         && new File(dir.getAbsolutePath() + "/" + name + "/hd").isDirectory();
@@ -43,17 +40,14 @@ public class UploadFlickr {
         }
     }
 
-    public UploadFlickr(String login,String pass)throws Exception{
-        this.flickr = new com.flickr.api.Flickr(API_KEY,SECRET_KEY,new REST());
-
-        ConnectionManager.signOnFlickr(login,pass);
-        ConnectionManager.connectToFlickr(this.flickr);
+    public UploadFlickr(String login,String pass, String secret)throws Exception{
+        this.flickr = new com.flickr.api.Flickr(API_KEY,secret,new REST());
+        ConnectionManager.signOnFlickr(this.flickr,login,pass);
         this.manageDirectory = new ManageDirectory(this.flickr);
     }
 
     public void pushGallery(String root,String path,String name){
         List<File> photos = Arrays.asList(new File(path).listFiles(new FilenameFilter() {
-            @Override
             public boolean accept(File dir, String name) {
                 return name.toLowerCase().endsWith(".jpg");
             }

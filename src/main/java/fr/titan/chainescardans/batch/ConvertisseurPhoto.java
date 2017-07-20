@@ -18,6 +18,7 @@ public class ConvertisseurPhoto {
 	private final String irfanDir;
 	private Logger logger = Logger.getLogger("ConvertisseurPhoto");
 	private ArrayList<String> dirToUpdate = new ArrayList<String>();
+	private Set<String> hdFolders = new HashSet<String>();
 	private List<String> updateScript = new ArrayList<String>();
 	private int bigHeight;
 	private int lowHeight;
@@ -85,7 +86,6 @@ public class ConvertisseurPhoto {
                                 // On verifie que le nombre de photos est le meme
                                 if(typeSynchro == 2){
                                     FilenameFilter filter = new FilenameFilter() {
-                                        @Override
                                         public boolean accept(File dir, String name) {
                                             return !name.contains(".db");
                                         }
@@ -106,7 +106,7 @@ public class ConvertisseurPhoto {
     }
 
     public void traiterRoot(String root,boolean bruteMode,boolean tri){
-		File[] dirs = new File(root).listFiles(new FileFilter(){
+		File[] dirs = new File(root).listFiles(new FileFilter() {
 			public boolean accept(File f) {
 				return f.isDirectory();
 			}
@@ -144,9 +144,10 @@ public class ConvertisseurPhoto {
 //            dirToUpdate.add(dir + "\\ld");
 //            return;
 //        }
-		
+
 		if(!new File(dir + "\\sd").exists() && !new File(dir + "\\ld").exists()){
             updateScript.add(new File(dir).getName());
+			hdFolders.add(dir + "\\hd");
         }
 		String name = new File(dir).getName().toLowerCase();
 		if(!new File(dir + "\\sd").exists()){
@@ -189,15 +190,17 @@ public class ConvertisseurPhoto {
 
 	private void trierPhotos(List<File> files){
 		logger.info("...Tri de photos");
-		Collections.sort(files,new Comparator<File>(){
+		Collections.sort(files, new Comparator<File>() {
 			public int compare(File f1, File f2) {
-				try{
+				try {
 					Metadata meta1 = JpegMetadataReader.readMetadata(f1);
 					Metadata meta2 = JpegMetadataReader.readMetadata(f2);
-					Date d1 = ((ExifDirectory)meta1.getDirectoryIterator().next()).getDate(ExifDirectory.TAG_DATETIME_ORIGINAL);
-					Date d2 = ((ExifDirectory)meta2.getDirectoryIterator().next()).getDate(ExifDirectory.TAG_DATETIME_ORIGINAL);
+					Date d1 = ((ExifDirectory) meta1.getDirectoryIterator().next()).getDate(ExifDirectory.TAG_DATETIME_ORIGINAL);
+					Date d2 = ((ExifDirectory) meta2.getDirectoryIterator().next()).getDate(ExifDirectory.TAG_DATETIME_ORIGINAL);
 					return d1.compareTo(d2);
-				}catch(Exception e){return 1;}
+				} catch (Exception e) {
+					return 1;
+				}
 			}
 		});
 	}
@@ -210,7 +213,7 @@ public class ConvertisseurPhoto {
 			String fn = name + count++ + ".jpg";
 			File renameFile = new File(f.getParent() + "\\" + fn);
 			if(!f.renameTo(renameFile)){
-                logger.error("Erreur lors de la creation de " + renameFile);
+                //logger.error("Erreur lors de la creation de " + renameFile);
             }
 			
 			final String convert = "\"" + irfanDir + "\" \"" + renameFile.getAbsolutePath() + "\" /jpgq=80 /resize=(0," + height + ") /resample /aspectratio /convert=\"" + outDir + "\\" + fn + "\""; 
@@ -246,6 +249,10 @@ public class ConvertisseurPhoto {
 
 	public ArrayList<String> getDirToUpdate() {
 		return dirToUpdate;
+	}
+
+	public Set<String> getHDFolders() {
+		return hdFolders;
 	}
 
 }
