@@ -1,0 +1,79 @@
+<html>
+
+<body>
+
+<style>
+img {margin-right:4px;margin-bottom:4px;}
+
+div {overflow:hidden}
+</style>
+
+<script>
+
+
+var folder = "file:/C:/Users/960963/Pictures/treat/hd2/";
+var nb = 30;
+var counter = 0;
+var images = [];
+for(var i = 1 ; i < nb ; i++){
+	var name = folder + "img (" + i + ").jpg";
+	var img = new Image();
+	img.src=name;
+	img.onload = function(){
+		images.push({height:this.height,width:this.width,src:this.src});
+		if(++counter == nb-1){
+			runDisplay();
+		}
+	}	
+}
+
+var minWidth = 180;
+var divWidth = 1200;
+
+var totalPart = 0;
+
+var toDisplay = [];
+
+function runDisplay(){
+	for(var i in images){
+		var img = images[i];
+		var ratio = img.width / img.height;
+		
+		if((divWidth - (toDisplay.length)*4)/ (ratio + totalPart) > minWidth){
+			 // On continue l'algo
+			 totalPart+=ratio;
+			 toDisplay.push(img);
+		}else{
+			// On affiche les images avec ce ratio
+			display();
+			totalPart = ratio;
+			toDisplay = [img];
+		}
+	}
+
+	display(300);
+}
+
+function display(min){
+	var div = document.getElementById('idToto');
+	min = min || 1000;
+	var height = Math.min((divWidth -(toDisplay.length)*4)  / totalPart,min);
+	// Pour toutes les images, calcule la taille reelle basee sur cette part
+	for(var i = 0 ; i < toDisplay.length ; i++){
+		var img = toDisplay[i];
+		var image = document.createElement('img');
+		image.src= img.src;
+		image.height = height;
+		image.width = (img.width/img.height)*height;
+		div.appendChild(image);		
+	}
+	div.appendChild(document.createElement('br'));
+}
+
+</script>
+
+<div id="idToto" style="width:1200px;margin:auto"></div>
+
+</body>
+
+</html>
