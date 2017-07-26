@@ -1,0 +1,45 @@
+.slider{height:0px;}
+#timeline .feature .slider {padding-top:0px}
+#timeline {
+	position:relative;
+}
+#timeline .navigation {
+	overflow:hidden;
+}	
+
+.time-interval-major{display:}
+
+#timeline .navigation .timenav-background {
+	background-color: #007DA1;
+}
+
+.gallery {
+	padding-left:20px;
+}
+
+.gallery div,.gallery span{
+   float:left;
+   text-align:center;
+   margin:3px 3px 3px 3px;
+   background-color:white//;#de7318;
+   width:160px;
+   height:110px;
+}
+
+.gallery div img,.gallery span img, .divGallery{
+   border:solid 2px white;
+   border-radius:10px;
+   padding:0px;
+   margin: 3px;
+   cursor:pointer;
+   height:100px;
+   border: 3px outset #007DA1;
+}
+.galleryFlickr img {
+   cursor:pointer;
+   margin-left:2px;
+   padding-left:0px;
+   border-radius:5px;
+   border:solid 1px #99DDFF;
+
+}

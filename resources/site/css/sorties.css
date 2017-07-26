@@ -1,0 +1,12 @@
+.jcarousel-skin-tango .jcarousel-item{width:70px;height:100px;}
+.jcarousel-skin-tango .jcarousel-clip-horizontal {height:100px;width:100%}
+.jcarousel-skin-tango .jcarousel-container-horizontal {width:400px;margin:auto}
+#idCaroussel img {height:100px;}
+
+.gallery{
+	background: #F0F6F9;
+	border: 1px solid #346F97;
+	border-radius: 10px;
+	padding-left:5px;
+	margin-left:10px;
+}

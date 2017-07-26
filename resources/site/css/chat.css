@@ -1,0 +1,26 @@
+div.chat {
+   position:fixed;
+   bottom:0;
+   height:100px;
+   width:89%;
+   background-color:grey;
+   border:solid 0px darkgrey;
+   padding:4px;
+}
+
+div.div_chat_action{
+   position:fixed;
+   bottom:0;
+   right:6%;
+   z-index:1000;
+}
+
+
+div.messages > p {
+	margin:0px;
+	font-size:10px;
+}
+
+#idFooter.chat_active {
+	margin-bottom:102px;
+}

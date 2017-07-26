@@ -1,0 +1,62 @@
+.table {
+	width:100%;
+	border-collapse:collapse;
+	border-radius-bottom-right:10px;
+	border-radius-bottom-left:10px;
+	font-family:Arial;
+	font-size:12px;
+	background-color:white;
+}
+
+.table tr:nth-child(even) {
+	background-color:#CFE1E0;
+}
+
+.table th:nth-child(1){
+	border-top-left-radius:10px;
+}
+
+.table th:nth-last-child(1){
+	border-top-right-radius:10px;
+}
+
+.table th {
+	padding:5px;
+	background-color:#007DA1;
+	color:white;
+	border-right:solid 1px white;
+}
+
+.table th:nth-last-child(1) {
+	border-right:none;
+}
+
+.table td {
+	padding-left:5px;
+}
+td > a > img {height:16px;margin-left:5px;}
+
+area {cursor:pointer;}
+
+#infos p {margin-top:0px;margin-bottom:0px;}
+
+#idCaroussel img {height:100px;}
+.jcarousel-skin-tango .jcarousel-clip-horizontal {height:100px;width:100%}
+.jcarousel-skin-tango .jcarousel-container-horizontal {width:92%;}
+.jcarousel-skin-tango .jcarousel-item {height:100px;width:auto}
+
+/* Miniatures du trombino */
+.thumb-trombi {
+	float:left;
+	border:solid 2px black;
+	border-radius:10px;
+	background-color:white;
+	width:170px;
+	font-size:12px;
+	margin-left:5px;
+	margin-top:5px;
+}
+
+.thumb-trombi img {
+	margin-bottom:-3px;
+}

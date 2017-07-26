@@ -1,0 +1,227 @@
+
+/* Style de titre */
+h2 {
+	font-size:14px;
+	margin-left:10px;
+	padding-top:15px;
+	font-weight:bold;
+	color:#004C62;
+	margin-top:0px;
+}
+
+.menu_title > div.active{
+	background-color:#004c62;
+}
+
+.menu_title > div{
+	float:right;
+	width:100px;
+	border-top-right-radius:10px;
+	border-top-left-radius:10px;
+	border:solid 2px white;
+	padding:3px;
+	background-color:#007da1;
+	color:white;
+	margin-top:-5px;
+	margin-left:10px;
+	font-weight:bold;
+	cursor:pointer;
+	border-bottom:none;
+	font-size:12px;
+}
+
+.menu_title > div > a {
+	text-decoration:none;
+	color:white;
+}
+
+.menu_title > div.title_accueil {
+	background-color:#ed6a00;
+	float:left;
+	text-align:center;
+	padding-top:6px;
+	margin-left:0px;
+	width:200px;
+	height:21px;
+}
+
+.menu_title > div.title_accueil:hover{
+	background-color:#004c62;
+}
+
+.menu_title img {
+	border:none;
+}
+
+.menu_title > div:hover{
+	background-color:#004c62;
+}
+
+<!-- Compte à rebours -->
+#idCountDown .countdown_amount {
+	font-size:10px;
+}
+
+#idCountDown  {
+	background-color: #007DA1;
+	border-radius:10px;
+	color:white;
+}
+
+body {
+	background-color:#99DDFF;
+}
+
+img {
+	padding-left:3px;
+}
+
+/* Style de bouton  */
+button, input[type="submit"],select {
+	color:#004c62;
+	padding:2px 10px 2px 10px;
+	background-color:#f5f5f5;
+    border:1px solid #dedede;
+    border-top:1px solid #eee;
+    border-left:1px solid #eee;
+    font-size:12px;
+    font-weight:bold;
+    line-height:130%;
+}
+
+button:hover, input[type="submit"]:hover{
+    background-color:#dff4ff;
+    border:1px solid #c2e1ef;
+    color:#336699;
+}
+button.active, input[type="submit"].active{
+    background-color:#004C62;
+    border:1px solid #6299c5;
+    color:#fff;
+}
+
+.label {
+	color:#004C62;
+	font-weight:bold;
+	font-size:12px;
+}
+
+/* Bloc de login */
+.menu-box{
+	float:right;
+	position:relative;	
+	background-color:#007DA1;
+	border:solid 1px white;
+	border-right:solid 2px white;
+	padding:5px;
+	border-bottom-left-radius:5px;	
+}
+
+.menu-box span {
+	display:inline-block;
+	width:20px;
+	color:white;
+	font-weight:bold;
+	text-align:right;
+	font-size:12px;
+}
+
+.menu-box span.icon {
+   margin-left:5px;
+   background-image:url('img/sprite_menu.png');
+   background-position:0px 0px;
+   background-size:14px auto;
+   background-repeat:no-repeat;
+}
+
+.menu-box span.icon_trombi {
+   background-position:0px -26px;
+}
+
+.menu-box span.icon_histo{
+   background-position:0px -13px;
+}
+
+.menu-box span.icon_tag{
+   background-position:0px -41px;
+}
+
+.menu-box span.icon_edito{
+   background-position:0px -55px;
+}
+
+.menu-box span.icon_search{
+   background-position:0px 2px;
+}
+
+.menu-box a {
+	color:white;
+	text-decoration:none;
+	font-size:12px;
+	margin-left:10px;
+}
+
+.menu-box a:hover {
+	color:white;
+	text-decoration:underline;
+}
+
+.menu-box > div {
+	text-align:right;
+}
+
+.menu-box a.icon {
+	background-repeat:no-repeat;
+	background-size:18px 18px;
+	background-position:right -2px;
+	padding-right:22px;
+}
+
+.icon_group_people {
+	background-position:2px -84px;
+}
+
+.icon_visite {
+	background-position:2px -160px;
+}
+
+.icon_autres {
+	background-position:2px -182px;
+}
+
+.icon_people {
+	background-position:2px -104px;
+}
+
+.icon_location {
+	background-position:2px -44px;
+}
+
+.icon_bike2 {
+   background-position:2px -22px;
+}
+
+.icon_group_bike {
+	background-position:2px -140px;
+}
+
+.icon_paysage {
+background-position:2px -123px;
+}
+
+.icon_keyword {
+	background-position:2px -64px;
+}
+
+.icon_users {
+	background-position:2px -1px;
+}
+
+.footer {
+	width:100%;
+	background-color:#004c62;
+	font-size:12px;
+	margin-top:10px;
+	text-align:center;
+	color:white;
+}
