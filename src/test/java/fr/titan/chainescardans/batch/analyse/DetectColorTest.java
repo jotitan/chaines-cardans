@@ -29,7 +29,6 @@ public class DetectColorTest extends TestCase {
 
     private String[] getTestImages() {
         return new File("target/test-classes").list(new FilenameFilter() {
-            @Override
             public boolean accept(File dir, String name) {
                 return name.endsWith(".jpg");
             }
