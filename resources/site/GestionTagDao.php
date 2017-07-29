@@ -508,6 +508,12 @@ function search($request,$fromLimit,$size){
    
    if(sizeof($keywords) > 0){
       $listKeywords = "('" . implode("','",$keywords) . "')";
+      $soundexValues = array();
+      for($i = 0 ; $i < sizeof($keywords) ; $i++){
+         array_push($soundexValues,soundex($keywords[$i]));
+      }
+      //$listNamesKeywords = "('" . implode("','",$soundexValues) . "')";
+      $listNamesKeywords = $listKeywords;
    /*    
    	Requete sur les tables d'index motcle_index et lieu_index. On calcule le nombre de mot de listkeywords qui correspondent a une meme expression. 
    	Plus un mot cle (découpé en plusieurs mots) matchs un nombre importants de mot recherché, plus le score est important*/
@@ -529,11 +535,11 @@ function search($request,$fromLimit,$size){
       . ") as sub group by idMoto"
       . " union "
    	. " select \"P\" as type,id,count(label) as nb,full as label from ( "
-	  . "	select id_user as id, concat('B',nom) as label,concat(concat(prenom,' '),nom) as full from Utilisateur where lower(nom) in " . $listKeywords
+	  . "	select id_user as id, concat('B',nom) as label,concat(concat(prenom,' '),nom) as full from Utilisateur where lower(nom) in " . $listNamesKeywords
 	  . "		union "
-	  .	"	select id_user as id, concat('A',nom) as label,concat(concat(prenom,' '),nom) as full from Utilisateur where lower(prenom) in " . $listKeywords
+	  .	"	select id_user as id, concat('A',nom) as label,concat(concat(prenom,' '),nom) as full from Utilisateur where lower(prenom) in " . $listNamesKeywords
 	  .	" ) as tmp group by id "
-	  . ") as sub order by sub.type,sub.id";
+	  . ") as sub order by sub.nb desc,sub.type asc,sub.id asc";
      
      //echo $query . "\n";
       /*
@@ -578,6 +584,7 @@ Chaque mot cle identifie est en AND (nouvel element)
       $dataToQuery = array();    // map avec type => Liste des cles and or. Liste d'object avec type et id comme parametre (stocké dans une liste)
       $linkIdTypeKey = array();  // Map : lien entre la cle de l'element modifié de l'element et le type de donnee
       if(mysql_num_rows($result) > 0){
+         $typeTreated = array();
          for($i = 0 ; $i < mysql_num_rows($result) ; $i++){
 				// On cherche le max pour déterminer si une moto, une personne ou un lieu a été défini précisément.
             // Si max trouve, c'est cet element qui sera utilisé directement, sinon on fera un ou sur tous les elements
@@ -585,53 +592,66 @@ Chaque mot cle identifie est en AND (nouvel element)
                $type = mysql_result($result,$i,0);
                $keyId = mysql_result($result,$i,1);
                $label = mysql_result($result,$i,3);
-         		if($nb > 1){
-         		   $linkIdTypeKey[$keyId] = $type;
-                  
-                  // Si mot cle et deja dans la liste et mots en commun, on fait un ou dessus (meme liste), sinon, append
-                  if($type == "K"){
-                     // Cherche un K
-                     foreach($dataToQuery as $list){
-                        if(!$done && $list[0][0] == "K"){
-                           // Parcours les elements
-                           foreach($list as $data){
-                              if(sizeof(array_intersect(split(" ",$data[2]),split(" ",$label))) >0){
-                                 // OR
-                                 array_push($list,array($type,$keyId,$label));
-                                 $done = true;
-                                 break;
-                              }
-                           }
-                        }
-                     }
-                     if(!$done){
-                        array_push($dataToQuery,array(array($type,$keyId,$label)));
-                     }
-                  }else{
-                     array_push($dataToQuery,array(array($type,$keyId,$label)));
-                  }
-                  // Sur chaque element on doit faire un AND car les deux elements sont importants. On incremente la cle
-         		}else{
-               // faire pour tous ensuite, mais il faut recuperer les labels
-                  // Pour chaque mot cle, stocke la chaine complete
-                     array_push($idKeywords,array($type,$keyId,$label));
+               //var_dump($nb,$type,$keyId,$label);
+               
+               //echo "toto " . $typeTreated[$type];
+               if($typeTreated[$type] == null){
+                   if($nb > 1){
+                     $typeTreated[$type] = true;
+             		   $linkIdTypeKey[$keyId] = $type;
+
+                      // Si mot cle et deja dans la liste et mots en commun, on fait un ou dessus (meme liste), sinon, append
+                      if($type == "K"){
+                         // Cherche un K
+                         foreach($dataToQuery as $list){
+                            if(!$done && $list[0][0] == "K"){
+                               // Parcours les elements
+                               foreach($list as $data){
+                                  if(sizeof(array_intersect(split(" ",$data[2]),split(" ",$label))) >0){
+                                     // OR
+                                     array_push($list,array($type,$keyId,$label));
+                                     $done = true;
+                                     break;
+                                  }
+                               }
+                            }
+                         }
+                         if(!$done){
+                            array_push($dataToQuery,array(array($type,$keyId,$label)));
+                         }
+                      }else{
+                         array_push($dataToQuery,array(array($type,$keyId,$label)));
+
+                      }
+                      // Sur chaque element on doit faire un AND car les deux elements sont importants. On incremente la cle
+             		}else{
+                   // faire pour tous ensuite, mais il faut recuperer les labels
+                      // Pour chaque mot cle, stocke la chaine complete
+                         //echo "PUSH " . $label . " " . $nb;
+                         array_push($idKeywords,array($type,$keyId,$label));
+                   }
                }
          	}
         }
-
+        //var_dump($idKeywords);
         // On recupere les mots cles restants, on verifie si pas present dans les max
          if(sizeof($idKeywords) > 0){
             // Pour chaque mot cle, on verifie s'il apparait deja dans la liste max. Si non, on l'ajoute
             foreach($idKeywords as $elem){
                
                $exist = false;
-               foreach($dataToQuery as $list){
+               for($i = 0 ; $i < sizeof($dataToQuery) ; $i++){
+               //foreach($dataToQuery as $list){
+                  $list = $dataToQuery[$i];
                   // Compare les types
                   // Attention, si le type existe deja, il faudra faire un OU. Le rajouter dans la meme liste pour assurer le OU
-                  if(!$exist && $list[0][0] == $elem[0]){
+                  // Ne pas appliquer pour les nom / prenom
+                  if(!$exist && $list[0][0] == $elem[0]/* && $elem[0] != 'P'*/){
                        // Parcours les elements
                        foreach($list as $data){
                           if(sizeof(array_intersect(split(" ",$data[2]),split(" ",$elem[2]))) >0){
+                              array_push($list,$elem);
+                              $dataToQuery[$i] = $list;
                              $exist = true;
                              break;
                           }
@@ -646,7 +666,7 @@ Chaque mot cle identifie est en AND (nouvel element)
                   }
             }
          }
-
+      //var_dump($dataToQuery);
       // Construit la requete avec dataToQuery
       $counter = 0;
       foreach($dataToQuery as $list){
@@ -662,9 +682,10 @@ Chaque mot cle identifie est en AND (nouvel element)
          }
          $where .= ") ";
       }
+      //echo $where;
    }
 
-          $select = "select m.DIR_MEDIA, pt.PATH_PHOTO, pt.ID_PHOTO_TAG ";
+          $select = "select distinct m.DIR_MEDIA, pt.PATH_PHOTO, pt.ID_PHOTO_TAG ";
             $limit = "";
             if($size!=null && $fromLimit!=null){
                $limit=" limit " . $fromLimit . ", " .$size;
